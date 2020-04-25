@@ -1,44 +1,49 @@
-create table if not exists Ingredient (
-  id varchar(4) not null,
-  name varchar(25) not null,
-  type varchar(10) not null
+CREATE SEQUENCE hibernate_sequence 
+  START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE IF NOT EXISTS ingredient (
+  id VARCHAR(4) NOT NULL,
+  name VARCHAR(25) NOT NULL,
+  type VARCHAR(10) NOT NULL
 );
 
-create table if not exists Taco (
-  id identity,
-  name varchar(50) not null,
-  createdAt timestamp not null
+CREATE TABLE IF NOT EXISTS taco (
+  id IDENTITY,
+  name VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP NOT NULL
 );
 
-create table if not exists Taco_Ingredients (
-  taco bigint not null,
-  ingredient varchar(4) not null
+CREATE TABLE IF NOT EXISTS taco_ingredients (
+  taco_id bigint NOT NULL,
+  ingredients_id VARCHAR(4) NOT NULL
 );
 
-alter table Taco_Ingredients
-    add foreign key (taco) references Taco(id);
-alter table Taco_Ingredients
-    add foreign key (ingredient) references Ingredient(id);
+ALTER TABLE taco_ingredients
+  ADD FOREIGN KEY (taco_id) REFERENCES taco(id);
 
-create table if not exists Taco_Order (
-  id identity,
-    name varchar(50) not null,
-    street varchar(50) not null,
-    city varchar(50) not null,
-    state varchar(2) not null,
-    zip varchar(10) not null,
-    ccNumber varchar(16) not null,
-    ccExpiration varchar(5) not null,
-    ccCVV varchar(3) not null,
-    createdAt timestamp not null
+ALTER TABLE taco_ingredients
+  ADD FOREIGN KEY (ingredients_id) REFERENCES ingredient(id);
+
+CREATE TABLE IF NOT EXISTS taco_order (
+  id IDENTITY,
+  name VARCHAR(50) NOT NULL,
+  street VARCHAR(50) NOT NULL,
+  city VARCHAR(50) NOT NULL,
+  state VARCHAR(2) NOT NULL,
+  zip VARCHAR(10) NOT NULL,
+  cc_number VARCHAR(16) NOT NULL,
+  cc_expiration VARCHAR(5) NOT NULL,
+  cc_cvv VARCHAR(3) NOT NULL,
+  created_at TIMESTAMP NOT NULL
 );
 
-create table if not exists Taco_Order_Tacos (
-  tacoOrder bigint not null,
-  taco bigint not null
+CREATE TABLE IF NOT EXISTS taco_order_tacos (
+  taco_order_id bigint NOT NULL,
+  tacos_id bigint NOT NULL
 );
 
-alter table Taco_Order_Tacos
-    add foreign key (tacoOrder) references Taco_Order(id);
-alter table Taco_Order_Tacos
-    add foreign key (taco) references Taco(id);
+ALTER TABLE taco_order_tacos
+    ADD FOREIGN KEY (taco_order_id) REFERENCES taco_order(id);
+
+ALTER TABLE taco_order_tacos
+    ADD FOREIGN KEY (tacos_id) REFERENCES taco(id);

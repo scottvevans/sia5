@@ -1,10 +1,11 @@
-package tacos.data.impl;
+package tacos.data.jdbc;
 
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -12,18 +13,20 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import tacos.Ingredient;
-import tacos.Taco;
 import tacos.data.TacoRepository;
+import tacos.domain.Ingredient;
+import tacos.domain.Taco;
 
 @Repository
+@Profile("jdbc")
 public class JdbcTacoRepository implements TacoRepository {
   
-  private static final String INSERT_TACO_SQL = "insert into Taco (name, createdAt) values (?, ?)";
+  private static final String INSERT_TACO_SQL = "INSERT INTO taco (name, created_at) VALUES (?, ?)";
 
-  private static final String[] TACO_GENERATED_ID_COLUMN = new String[] {"ID"};
+  private static final String[] TACO_GENERATED_ID_COLUMN = new String[] {"id"};
 
-  private static final String INSERT_TACO_INGREDIENT_SQL = "insert into Taco_Ingredients (taco, ingredient) values (?, ?)";
+  private static final String INSERT_TACO_INGREDIENT_SQL = 
+      "INSERT INTO taco_ingredients (taco_id, ingredients_id) VALUES (?, ?)";
 
   private final PreparedStatementCreatorFactory preparedStatementCreatorFactory;
 

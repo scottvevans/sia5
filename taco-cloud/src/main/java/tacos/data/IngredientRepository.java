@@ -1,12 +1,14 @@
 package tacos.data;
 
-import tacos.Ingredient;
+import java.util.Optional;
+
+import tacos.domain.Ingredient;
 
 public interface IngredientRepository {
 
   Iterable<Ingredient> findAll();
 
-  Ingredient findOne(String id);
+  Optional<Ingredient> findById(String id);
 
   Ingredient save(Ingredient ingredient);
 

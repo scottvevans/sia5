@@ -1,7 +1,5 @@
 package tacos.web;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
-import tacos.Taco;
 import tacos.data.IngredientRepository;
 import tacos.data.TacoRepository;
+import tacos.domain.Ingredient;
+import tacos.domain.Order;
+import tacos.domain.Taco;
+import tacos.domain.Ingredient.Type;
 import tacos.util.CollectionUtils;
-import tacos.Ingredient;
-import tacos.Ingredient.Type;
-import tacos.Order;
 
 @Slf4j
 @Controller
@@ -68,8 +66,7 @@ public class DesignTacoController {
   public Taco taco() {
     return new Taco();
   }
-
-
+  
   @GetMapping
   public String showDesignForm(final Model model) {
     model.addAttribute("design", new Taco());
@@ -90,7 +87,7 @@ public class DesignTacoController {
     
     return ORDER_REDIRECT;
   }
-
+  
   private List<Ingredient> filterByType(final List<Ingredient> ingredients, final Type type) {
           return ingredients
           .stream()
