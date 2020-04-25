@@ -1,8 +1,9 @@
-DELETE FROM taco_order_tacos;
 DELETE FROM taco_ingredients;
+DELETE FROM taco_order_tacos;
+DELETE FROM ingredient;
 DELETE FROM taco;
 DELETE FROM taco_order;
-DELETE FROM ingredient;
+DELETE FROM user;
 
 INSERT INTO ingredient (id, name, type) VALUES ('FLTO', 'Flour Tortilla', 'WRAP');
 INSERT INTO ingredient (id, name, type) VALUES ('COTO', 'Corn Tortilla', 'WRAP');

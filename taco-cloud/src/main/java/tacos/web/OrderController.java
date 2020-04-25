@@ -2,6 +2,7 @@ package tacos.web;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import lombok.extern.slf4j.Slf4j;
 import tacos.data.OrderRepository;
 import tacos.domain.Order;
+import tacos.security.User;
 
 @Slf4j
 @Controller
@@ -31,18 +33,28 @@ public class OrderController {
   }
 
   @GetMapping("/current")
-  public String orderForm(Model model) {
-    model.addAttribute("order", new Order());
+  public String orderForm(Model model, @AuthenticationPrincipal User user) {
+    Order order = new Order();
+
+    order.setName(user.getFirstName() + " " + user.getLastName());
+    order.setStreet(user.getStreet());
+    order.setCity(user.getCity());
+    order.setZip(user.getZip());
+    order.setState(user.getState());
+    model.addAttribute("order", order);
+
     return ORDER_FORM_VIEW;
   }
 
   @PostMapping
-  public String processOrder(@Valid final Order order, final Errors errors, final SessionStatus sessionStatus) {
+  public String processOrder(@Valid final Order order, final Errors errors, 
+      final SessionStatus sessionStatus, @AuthenticationPrincipal final User user) {
     if (errors.hasErrors()) {
       return ORDER_FORM_VIEW;
     }
 
     log.info("Order submitted: " + order);
+    order.setUser(user);
     orderRepository.save(order);
     sessionStatus.setComplete();
 

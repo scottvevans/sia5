@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import tacos.data.OrderRepository;
 import tacos.domain.Order;
 
-@Profile("jpa")
+@Profile("!jdbc")
 public interface JpaOrderRepository extends CrudRepository<Order, Long>, OrderRepository {
 
 }

@@ -9,3 +9,7 @@ I'm correcting them as I go along as a learning exercise. Enjoy.
 1. Getting started with Spring
 2. Developing web applications
 3. Working with data
+4. Securing Spring
+
+*Note: add profile 'dev' to your run config to enable h2console*   
+*Note: add profile 'jdbc' to your run config to use JDBC instead of JPA for tacos and orders persistence*   

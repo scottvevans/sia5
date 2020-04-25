@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import tacos.data.IngredientRepository;
 import tacos.domain.Ingredient;
 
-@Profile("jpa")
+@Profile("!jdbc")
 public interface JpaIngredientRepository extends CrudRepository<Ingredient, String>, IngredientRepository {
 
 }

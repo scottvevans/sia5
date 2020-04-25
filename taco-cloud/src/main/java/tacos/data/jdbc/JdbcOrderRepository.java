@@ -11,12 +11,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import lombok.extern.slf4j.Slf4j;
 import tacos.data.OrderRepository;
 import tacos.domain.Order;
 import tacos.domain.Taco;
 
 @Repository
 @Profile("jdbc")
+@Slf4j
 public class JdbcOrderRepository implements OrderRepository {
 
   private final SimpleJdbcInsert orderInserter;
@@ -30,6 +32,7 @@ public class JdbcOrderRepository implements OrderRepository {
 
   @Override
   public Order save(Order order) {
+    log.info("save {}", order);
     order.setCreatedAt(new Date());
 
     long orderId = saveOrderDetails(order);
@@ -46,6 +49,7 @@ public class JdbcOrderRepository implements OrderRepository {
   private long saveOrderDetails(Order order) {
     Map<String, Object> values = new HashMap<>();
 
+    values.put("user_id", order.getUser().getId());
     values.put("name", order.getName());
     values.put("street", order.getStreet());
     values.put("city", order.getCity());
