@@ -39,11 +39,11 @@ CREATE TABLE IF NOT EXISTS taco (
 );
 
 CREATE TABLE IF NOT EXISTS taco_order_tacos (
-  taco_order_id bigint NOT NULL,
+  order_id bigint NOT NULL,
   tacos_id bigint NOT NULL
 );
 
-ALTER TABLE taco_order_tacos ADD FOREIGN KEY (taco_order_id) REFERENCES taco_order(id);
+ALTER TABLE taco_order_tacos ADD FOREIGN KEY (order_id) REFERENCES taco_order(id);
 
 ALTER TABLE taco_order_tacos ADD FOREIGN KEY (tacos_id) REFERENCES taco(id);
     

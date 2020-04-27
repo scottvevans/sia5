@@ -59,23 +59,26 @@ public class DesignTacoController {
   
   @ModelAttribute(name = "order")
   public Order order() {
-    return new Order();
+    Order order = new Order();
+    log.info("created: " + order.bark());
+    
+    return order;
   }
 
-  @ModelAttribute(name = "taco")
+  @ModelAttribute(name = "design")
   public Taco taco() {
     return new Taco();
   }
   
   @GetMapping
   public String showDesignForm(final Model model) {
-    model.addAttribute("design", new Taco());
     return DESIGN_VIEW;
   }
   
   @PostMapping
   public String processDesign(
       @Valid @ModelAttribute("design") final Taco design, final Errors errors, @ModelAttribute final Order order) {
+    log.info("processDesign order: {}", order.bark());
     if (errors.hasErrors()) {
       return DESIGN_VIEW;
     } 
@@ -84,6 +87,7 @@ public class DesignTacoController {
     final Taco saved = tacoRepository.save(design);
     
     order.addDesign(saved);
+    log.info("processDesign order after addDesign: {}", order.bark());
     
     return ORDER_REDIRECT;
   }

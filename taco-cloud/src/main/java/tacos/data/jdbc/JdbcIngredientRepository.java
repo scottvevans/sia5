@@ -2,6 +2,7 @@ package tacos.data.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,23 +12,24 @@ import org.springframework.stereotype.Repository;
 
 import tacos.data.IngredientRepository;
 import tacos.domain.Ingredient;
+import tacos.domain.Taco;
 
 @Repository
 @Profile("jdbc")
 public class JdbcIngredientRepository implements IngredientRepository {
 
-  private JdbcTemplate jdbc;
+  private JdbcTemplate jdbcTemplate;
 
 
   @Autowired
-  public JdbcIngredientRepository(JdbcTemplate jdbc) {
-    this.jdbc = jdbc;
+  public JdbcIngredientRepository(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
   }
 
 
   @Override
   public Iterable<Ingredient> findAll() {
-    return jdbc.query(
+    return jdbcTemplate.query(
         "SELECT id, name, type FROM ingredient", 
         this::mapRowToIngredient);
   }
@@ -35,7 +37,7 @@ public class JdbcIngredientRepository implements IngredientRepository {
   @Override
   public Optional<Ingredient> findById(String id) {
     return Optional.ofNullable(
-        jdbc.queryForObject("SELECT id, name, type FROM ingredient WHERE id=?", 
+        jdbcTemplate.queryForObject("SELECT id, name, type FROM ingredient WHERE id = ?", 
             this::mapRowToIngredient, id));
   }
 
@@ -49,11 +51,23 @@ public class JdbcIngredientRepository implements IngredientRepository {
   
   @Override
   public Ingredient save(Ingredient ingredient) {
-    jdbc.update(
+    jdbcTemplate.update(
         "INSERT INTO ingredient (id, name, type) VALUES (?, ?, ?)",
         ingredient.getId(),
         ingredient.getName(),
         ingredient.getType().toString());
     return ingredient;
+  }
+
+
+  List<Ingredient> findByTacoOrderByName(Taco taco) {
+    return jdbcTemplate.query(
+        "SELECT ingredient.id as id, ingredient.name as name, ingredient.type as type " +
+        "FROM ingredient " +
+        "INNER JOIN taco_ingredients " +
+        "ON ingredient.id = taco_ingredients.ingredients_id " +
+        "WHERE taco_ingredients.taco_id = ? " +
+        "ORDER BY ingredient.name",
+        this::mapRowToIngredient, taco.getId());
   }
 }

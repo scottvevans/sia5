@@ -1,5 +1,7 @@
 package tacos.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
 @Entity
-public class Ingredient {
+public class Ingredient implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   @Id
   private final String id;
